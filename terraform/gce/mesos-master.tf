@@ -7,46 +7,49 @@ resource "atlas_artifact" "mesos-master" {
 }
 
 resource "google_compute_instance" "mesos-master" {
-    count        = "${var.masters}"
-    name         = "apollo-mesos-master-${count.index}"
-    machine_type = "${var.instance_type.master}"
-    zone         = "${var.zone}"
-    tags         = ["mesos-master"]
-    
-    disk {
-      image = "${atlas_artifact.mesos-master.id}"
-    }
+  count        = "${var.masters}"
+  name         = "apollo-mesos-master-${count.index}"
+  machine_type = "${var.instance_type.master}"
+  zone         = "${var.zone}"
+  tags         = ["mesos-master"]
 
-    # declare metadata for configuration of the node
-    metadata {
-      role = "mesos_masters"
+  disk {
+    image = "${atlas_artifact.mesos-master.id}"
+  }
+
+  # declare metadata for configuration of the node
+  metadata {
+    role = "mesos_masters"
+  }
+
+  network_interface {
+    network = "default"
+    access_config {
+      // Ephemeral IP
     }
-    
-    network_interface {
-      network = "default"
-        access_config {
-            // Ephemeral IP
-        }
-    }   
+  }
+  labels = {
+    yor_trace = "c592b38f-a0e8-42d7-ab4a-55fbe2ef6393"
+  }
 }
 
 resource "google_compute_firewall" "default" {
-    name    = "default-allow-all"
-    network = "default"
+  name    = "default-allow-all"
+  network = "default"
 
-    allow {
-        protocol = "icmp"
-    }
+  allow {
+    protocol = "icmp"
+  }
 
-    allow {
-        protocol = "tcp"
-        ports    = ["1-65535"]
-    }
+  allow {
+    protocol = "tcp"
+    ports    = ["1-65535"]
+  }
 
-    allow {
-        protocol = "udp"
-        ports    = ["1-65535"]
-    }
+  allow {
+    protocol = "udp"
+    ports    = ["1-65535"]
+  }
 
-    source_ranges = ["0.0.0.0/0"]
+  source_ranges = ["0.0.0.0/0"]
 }

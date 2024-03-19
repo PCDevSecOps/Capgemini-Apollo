@@ -31,8 +31,9 @@ resource "aws_instance" "mesos-master" {
   depends_on        = ["aws_instance.bastion"]
   user_data         = "${template_file.master_cloud_init.rendered}"
   tags = {
-    Name = "apollo-mesos-master-${count.index}"
-    role = "mesos_masters"
+    Name      = "apollo-mesos-master-${count.index}"
+    role      = "mesos_masters"
+    yor_trace = "7e7a3e78-ac49-4e96-8334-9c3c6b216660"
   }
   connection {
     user                = "core"

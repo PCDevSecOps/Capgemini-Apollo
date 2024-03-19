@@ -31,8 +31,9 @@ resource "aws_instance" "mesos-agent" {
   depends_on        = ["aws_instance.mesos-master"]
   user_data         = "${template_file.agent_cloud_init.rendered}"
   tags = {
-    Name = "apollo-mesos-agent-${count.index}"
-    role = "mesos_agents"
+    Name      = "apollo-mesos-agent-${count.index}"
+    role      = "mesos_agents"
+    yor_trace = "174efd1b-6b80-44f2-b8fd-910f211a0e3c"
   }
   ebs_block_device {
     device_name           = "/dev/xvdb"

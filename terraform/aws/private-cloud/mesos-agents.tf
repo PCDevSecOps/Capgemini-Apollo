@@ -30,13 +30,14 @@ resource "aws_instance" "mesos-agent" {
   key_name          = "${module.aws-keypair.keypair_name}"
   source_dest_check = false
   # @todo - fix this as this only allows 3 agents maximum (due to splittingo on the count variable)
-  subnet_id         = "${element(split(",", module.vpc.private_subnets), count.index)}"
-  security_groups   = ["${module.sg-default.security_group_id}"]
-  depends_on        = ["aws_instance.bastion", "aws_instance.mesos-master"]
-  user_data         = "${template_file.master_cloud_init.rendered}"
+  subnet_id       = "${element(split(",", module.vpc.private_subnets), count.index)}"
+  security_groups = ["${module.sg-default.security_group_id}"]
+  depends_on      = ["aws_instance.bastion", "aws_instance.mesos-master"]
+  user_data       = "${template_file.master_cloud_init.rendered}"
   tags = {
-    Name = "apollo-mesos-agent-${count.index}"
-    role = "mesos_agents"
+    Name      = "apollo-mesos-agent-${count.index}"
+    role      = "mesos_agents"
+    yor_trace = "2e009ac2-8d94-41d1-bfd5-1ea3531c2911"
   }
   connection {
     user                = "core"

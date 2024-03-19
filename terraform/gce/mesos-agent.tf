@@ -6,24 +6,27 @@ resource "atlas_artifact" "mesos-agent" {
 }
 
 resource "google_compute_instance" "mesos-agent" {
-    count        = "${var.agents}"
-    name         = "apollo-mesos-agent-${count.index}"
-    machine_type = "${var.instance_type.agent}"
-    zone         = "${var.zone}"
-    tags         = ["mesos-agent","http","https","ssh"]
+  count        = "${var.agents}"
+  name         = "apollo-mesos-agent-${count.index}"
+  machine_type = "${var.instance_type.agent}"
+  zone         = "${var.zone}"
+  tags         = ["mesos-agent", "http", "https", "ssh"]
 
-    disk {
-      image = "${atlas_artifact.mesos-agent.id}"
-    }
-    
-    metadata {
-      role = "mesos_agents"
-    }
+  disk {
+    image = "${atlas_artifact.mesos-agent.id}"
+  }
 
-    network_interface {
-      network = "default"
-        access_config {
-            // Ephemeral IP
-        }
-    }   
+  metadata {
+    role = "mesos_agents"
+  }
+
+  network_interface {
+    network = "default"
+    access_config {
+      // Ephemeral IP
+    }
+  }
+  labels = {
+    yor_trace = "88562c80-c854-4c62-b824-567a90dda89e"
+  }
 }
