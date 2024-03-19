@@ -30,7 +30,8 @@ resource "aws_instance" "mesos-master" {
   security_groups   = ["${module.sg-default.security_group_id}"]
   user_data         = "${template_file.master_cloud_init.rendered}"
   tags = {
-    Name = "apollo-mesos-master-${count.index}"
-    role = "mesos_masters"
+    Name      = "apollo-mesos-master-${count.index}"
+    role      = "mesos_masters"
+    yor_trace = "9088c15c-a2fb-4831-bef2-31b6363dcfdb"
   }
 }

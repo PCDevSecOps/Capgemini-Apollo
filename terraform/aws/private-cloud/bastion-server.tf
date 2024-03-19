@@ -23,18 +23,19 @@ resource "template_file" "bastion_cloud_init" {
 }
 
 resource "aws_instance" "bastion" {
-  instance_type     = "${var.bastion_instance_type}"
-  ami               = "${module.bastion_ami.ami_id}"
+  instance_type = "${var.bastion_instance_type}"
+  ami           = "${module.bastion_ami.ami_id}"
   # Just put the bastion in the first public subnet
-  subnet_id         = "${element(split(",", module.vpc.public_subnets), 0)}"
+  subnet_id = "${element(split(",", module.vpc.public_subnets), 0)}"
   # @todo - this allows bastion connection on any port which is not ideal but was like this previously.
   security_groups   = ["${module.sg-default.security_group_id}", "${aws_security_group.bastion.id}"]
   key_name          = "${module.aws-keypair.keypair_name}"
   source_dest_check = false
   user_data         = "${template_file.bastion_cloud_init.rendered}"
   tags = {
-    Name = "apollo-mesos-bastion"
-    role = "bastion"
+    Name      = "apollo-mesos-bastion"
+    role      = "bastion"
+    yor_trace = "9606a32f-bbd4-4449-8f42-fbd3503bfefd"
   }
   connection {
     user        = "core"
@@ -66,4 +67,7 @@ resource "aws_instance" "bastion" {
 resource "aws_eip" "bastion" {
   instance = "${aws_instance.bastion.id}"
   vpc      = true
+  tags = {
+    yor_trace = "d0914d70-3d7a-48a7-8175-912f1b27c7d7"
+  }
 }

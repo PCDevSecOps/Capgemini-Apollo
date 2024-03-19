@@ -34,6 +34,9 @@ resource "aws_security_group" "default" {
   tags {
     Name = "apollo-default-sg"
   }
+  tags = {
+    yor_trace = "6b4a3dda-0b87-46c9-84bf-9e9428e4480e"
+  }
 }
 
 # output variables

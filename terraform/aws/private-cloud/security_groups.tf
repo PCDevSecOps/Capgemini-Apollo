@@ -52,4 +52,7 @@ resource "aws_security_group" "bastion" {
   tags {
     Name = "bastion-apollo-sg"
   }
+  tags = {
+    yor_trace = "cf1d82f1-4772-4b6a-b5bb-16a8f33b5157"
+  }
 }
